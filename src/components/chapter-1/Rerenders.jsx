@@ -31,6 +31,7 @@ function ModalAndButtonComponent() {
 }
 
 export default function Rerenders() {
+  // instead of putting the state here, we move it to the Component that truly cares
   return (
     <>
       <ModalAndButtonComponent />

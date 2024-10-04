@@ -15,7 +15,7 @@ const MovingBlock = ({ position }) => (
   </div>
 );
 
-const MainScrollableArea = ({ content }) => {
+const MainScrollableArea = ({ children }) => {
   const [position, setPosition] = useState(300);
   const onScroll = (e) => {
     // calculate position based on the scrolled value
@@ -28,20 +28,19 @@ const MainScrollableArea = ({ content }) => {
     <div className="scrollable-block" onScroll={onScroll}>
       {/* pass position value to the new movable component */}
       <MovingBlock position={position} />
-      {content}
+      {children}
     </div>
   );
 };
 
 export const ComponentsAsProps = () => {
-  // this is magic
-  const HeavyComponents = (
-    <>
-      <VerySlowComponent />
-      <BunchOfStuff />
-      <OtherStuffAlsoComplicated />
-    </>
+  return (
+    <MainScrollableArea>
+      <>
+        <VerySlowComponent />
+        <BunchOfStuff />
+        <OtherStuffAlsoComplicated />
+      </>
+    </MainScrollableArea>
   );
-
-  return <MainScrollableArea content={HeavyComponents} />;
 };

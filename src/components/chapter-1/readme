@@ -4,4 +4,4 @@ Where you put state is very important. Ideally, to avoid future
 performance problems, you'd want to isolate it as much as possible to as
 tiny and light components as possible.
 
-By removing the state and placing igt where absolutely necessary, the heavy components only run once and never rerender
+By removing the state and placing it where absolutely necessary, the heavy components only run once and never rerender
