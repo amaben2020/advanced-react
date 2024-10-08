@@ -1,0 +1,100 @@
+import React, { useState, useCallback } from 'react';
+import { createRoot } from 'react-dom/client';
+
+function WeatherDashboard() {
+// instead of requesting data from an API, use this mock data
+const mockWeatherData = {
+'New York': {
+temperature: '22°C',
+humidity: '56%',
+windSpeed: '15 km/h'
+},
+'Los Angeles': {
+temperature: '27°C',
+humidity: '45%',
+windSpeed: '10 km/h',
+},
+'London': {
+temperature: '15°C',
+humidity: '70%',
+windSpeed: '20 km/h'
+},
+};
+
+const [searchTerm, setSearchTerm] = useState("")
+const [weatherInfo, setWeatherInfo] = useState(null)
+const [searchedCities, setSearchedCities] = useState([])
+const [errorMessage, setErrorMessage] = useState("")
+
+const handleSearch = () => {
+setErrorMessage("")
+if(mockWeatherData[searchTerm]){
+setWeatherInfo(mockWeatherData[searchTerm])
+if(!searchedCities.includes(searchTerm)){
+setSearchedCities([...searchedCities, searchTerm])
+}
+} else {
+setWeatherInfo(null)
+setErrorMessage("City not found")
+}
+}
+
+const handlePreviousSearch = (city) => {
+setSearchTerm(city)
+setWeatherInfo(mockWeatherData[city])
+setErrorMessage("")
+}
+
+const handleSearchTerm = useCallback((e) => setSearchTerm(e.target.value), [])
+
+const inputStyle = {
+padding: 5,
+borderRadius: 10
+}
+
+const inputButtonStyle = {
+padding: 5,
+color: "white",
+background: "green"
+}
+
+return (
+
+<div>
+<input
+      style={inputStyle}
+       type="text" id="citySearch" placeholder="Search for a city..." value={searchTerm}
+      onChange={handleSearchTerm}
+      />
+<button id="searchButton" onClick={handleSearch}
+       style={inputButtonStyle}
+      >Search</button>
+
+      <div id="weatherData">
+       {
+       weatherInfo ? (
+       <>
+        <div>Temperature: {weatherInfo.temperature}</div>
+        <div>Humidity: {weatherInfo.humidity}</div>
+        <div>Wind Speed: {weatherInfo.windSpeed}</div>
+       </>
+       ) : (<div>{errorMessage} </div>)
+       }
+      </div>
+
+      <div id="previousSearches">
+      <h3> Previous searches: </h3>
+      {searchedCities.map((city, index) => (
+      <button key={index} onClick={() => handlePreviousSearch(city)}>
+          {city}
+      </button>
+      ))}
+      </div>
+    </div>
+
+);
+}
+
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<WeatherDashboard />);
