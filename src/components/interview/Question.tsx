@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuthContext } from '../context';
 
 type TSearch = {
   temperature: string;
@@ -19,6 +20,12 @@ export function WeatherDashboard() {
   const [error, setError] = useState<string>('');
   const [prevSearch, setPrevSearch] = useState<TSearchResult[]>([]);
   const [searchResult, setSearchResult] = useState<TSearchResult | null>(null);
+
+  const data = useAuthContext();
+
+  useEffect(() => {}, []);
+
+  console.log(data);
 
   const mockWeatherData = {
     'New York': {

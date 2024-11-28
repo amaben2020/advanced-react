@@ -16,6 +16,7 @@ const ThreeColumnsLayout = ({ leftColumn, middleColumn, rightColumn }) => (
     <div className="right">{rightColumn}</div>
   </div>
 );
+
 export default function ThreeColsLayout() {
   return (
     <ThreeColumnsLayout
