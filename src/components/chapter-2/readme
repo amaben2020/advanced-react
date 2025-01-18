@@ -5,5 +5,4 @@ Why components as props are not affected by re-renders.
 What an Element is, how it's different from a Component, and
 why it's important to know that distinction.
 The basics of React reconciliation and diffing.
-What the "children as props" pattern is, and how it can prevent re-
-renders.
+What the "children as props" pattern is, and how it can prevent re-renders.

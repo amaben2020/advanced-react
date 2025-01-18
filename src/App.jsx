@@ -6,12 +6,13 @@ import ThreeColsLayout from './components/chapter-3/three-cols-layout';
 import ExpensiveComponent from './components/chapter-4';
 import { AuthCTX } from './components/context';
 import { WeatherDashboard } from './components/interview/Question';
+import AllPages from './components/zustand/pages/AllPages';
 
 function App() {
   return (
     <AuthCTX>
       {/* <Rerenders /> */}
-      <ComponentsAsProps />
+      {/* <ComponentsAsProps />
 
       <ModalDiag />
 
@@ -19,7 +20,9 @@ function App() {
 
       <ExpensiveComponent />
 
-      <WeatherDashboard />
+      <WeatherDashboard /> */}
+
+      <AllPages />
     </AuthCTX>
   );
 }

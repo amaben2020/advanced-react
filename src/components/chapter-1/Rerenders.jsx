@@ -14,8 +14,6 @@ function ModalAndButtonComponent() {
   const { isOpen, open, close } = useModalDialog();
   const matches = useMediaQuery();
 
-  console.log(matches.matches);
-
   useEffect(() => {
     if (matches.matches) {
       alert(matches.matches);
@@ -31,7 +29,7 @@ function ModalAndButtonComponent() {
 }
 
 export default function Rerenders() {
-  // instead of putting the state here, we move it to the Component that truly cares
+  // instead of putting the state here, we move it to the Component that truly cares which is the ModalAndButtonComponent.
   return (
     <>
       <ModalAndButtonComponent />
