@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from '../store';
 
 import EventEmitter from 'eventemitter3';
+import ReducerComponent from '../../reducer';
 
 const eventEmitter = new EventEmitter();
 
@@ -85,6 +86,7 @@ const PageA = () => {
       PageA <button onClick={() => update(20)}>Update</button>
       <Header />
       <Main />
+      <ReducerComponent />
     </div>
   );
 };

@@ -27,6 +27,7 @@ const MainScrollableArea = ({ children }) => {
   return (
     <div className="scrollable-block" onScroll={onScroll}>
       {/* pass position value to the new movable component */}
+
       <MovingBlock position={position} />
       {children}
     </div>
