@@ -3,6 +3,9 @@ import { useForm } from '../store';
 
 import EventEmitter from 'eventemitter3';
 import ReducerComponent from '../../reducer';
+import { VirtuosoComponent } from '../../virtualization/virtuoso';
+import ReactListComponent from '../../virtualization/react-window';
+import UserList from '../../virtualization/infinite-scroller';
 
 const eventEmitter = new EventEmitter();
 
@@ -33,7 +36,7 @@ function Header() {
   return (
     <div>
       <h1>{state.header}</h1>
-      <p>Header listens only to the first occurence new input.</p>
+      <p>Header listens only to the first occurrence new input.</p>
     </div>
   );
 }
@@ -86,7 +89,10 @@ const PageA = () => {
       PageA <button onClick={() => update(20)}>Update</button>
       <Header />
       <Main />
-      <ReducerComponent />
+      {/* <ReducerComponent /> */}
+      <VirtuosoComponent />
+      {/* <ReactListComponent /> */}
+      <UserList />
     </div>
   );
 };

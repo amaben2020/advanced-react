@@ -6,7 +6,6 @@ const AllPages = () => {
   return (
     <>
       <PageA />
-
       <PageB />
     </>
   );

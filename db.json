@@ -1,0 +1,64 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "a title",
+      "views": 100
+    },
+    {
+      "id": "2",
+      "title": "another title",
+      "views": 200
+    },
+    {
+      "id": "1741893325417",
+      "title": "New Optimistic Post 4",
+      "views": 400
+    },
+    {
+      "id": "1741893327889",
+      "title": "New Optimistic Post 4",
+      "views": 400
+    },
+    {
+      "id": "1741942215361",
+      "title": "New Optimistic Post 4",
+      "views": 400
+    },
+    {
+      "id": "1741942260134",
+      "title": "New Optimistic Post 4",
+      "views": 400
+    },
+    {
+      "id": "1741942261948",
+      "title": "New Optimistic Post 4",
+      "views": 400
+    },
+    {
+      "id": "1741942266559",
+      "title": "New Optimistic Post 4",
+      "views": 400
+    },
+    {
+      "id": "1741942271953",
+      "title": "New Optimistic Post 4",
+      "views": 400
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "text": "a comment about post 1",
+      "postId": "1"
+    },
+    {
+      "id": "2",
+      "text": "another comment about post 1",
+      "postId": "1"
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
