@@ -2,47 +2,47 @@
   "posts": [
     {
       "id": "1",
-      "title": "a title",
+      "title": "Post 1",
       "views": 100
     },
     {
       "id": "2",
-      "title": "another title",
+      "title": "Post 2",
       "views": 200
     },
     {
       "id": "1741893325417",
-      "title": "New Optimistic Post 4",
+      "title": "Post 3",
       "views": 400
     },
     {
       "id": "1741893327889",
-      "title": "New Optimistic Post 4",
+      "title": "Post 4",
       "views": 400
     },
     {
       "id": "1741942215361",
-      "title": "New Optimistic Post 4",
+      "title": "Post 5",
       "views": 400
     },
     {
       "id": "1741942260134",
-      "title": "New Optimistic Post 4",
+      "title": "Post 6",
       "views": 400
     },
     {
       "id": "1741942261948",
-      "title": "New Optimistic Post 4",
+      "title": "Post 7",
       "views": 400
     },
     {
       "id": "1741942266559",
-      "title": "New Optimistic Post 4",
+      "title": "Post 8",
       "views": 400
     },
     {
       "id": "1741942271953",
-      "title": "New Optimistic Post 4",
+      "title": "Post 9",
       "views": 400
     }
   ],

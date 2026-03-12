@@ -2,7 +2,7 @@ import { Ref, useCallback, useEffect, useState } from 'react';
 
 export function useHover() {
   const [isHovered, setIsHovered] = useState(false);
-  const [node, setNode] = (useState < T) | (null > null);
+  const [node, setNode] = useState(null > null);
 
   const ref = useCallback((node) => {
     setNode(node);
@@ -33,7 +33,7 @@ export function useHover() {
 // if you want to try your code on the right panel
 // remember to export App() component like below
 
-export function App() {
+export function HoveredApp() {
   const [ref, isHovered] = useHover();
   return <div ref={ref}>{isHovered ? 'hovered' : 'not hovered'}</div>;
 }

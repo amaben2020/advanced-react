@@ -1,0 +1,167 @@
+/* https://www.joshwcomeau.com/css/interactive-guide-to-grid/ */
+
+.container {
+  display: grid;
+  /* grid-template-columns: 25% 65% 10%; */
+  /* grid-template-columns: 1fr 2fr 1fr;
+  gap: 16px; */
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 5rem 1fr;
+}
+
+.child {
+  border: 1px solid black;
+}
+
+.calendar {
+  display: grid;
+  /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;  */
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.day {
+  border: 1px solid white;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.parent {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.son {
+  border: 1px solid red;
+  padding: 20px;
+  /* grid-row: 3;
+  grid-column: 2;
+  background-color: aqua; */
+}
+
+.grail {
+  display: grid;
+  grid-template-columns: 2fr 5fr;
+  grid-template-rows: 50px 1fr 100px;
+  height: 50vh;
+  grid-template-areas: 'header header' 'sidebar main' 'footer footer';
+}
+.header {
+  grid-area: header;
+  background-color: azure;
+}
+.sidebar {
+  grid-area: sidebar;
+  background-color: greenyellow;
+}
+.main {
+  grid-area: main;
+  background-color: black;
+}
+.footer {
+  grid-area: footer;
+  background-color: azure;
+}
+
+/* Base container styles */
+.cuntainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  min-height: 100vh; /* Full viewport height */
+}
+
+/* Grid layout */
+.layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  grid-auto-rows: 100px; /* Fixed row height */
+  gap: 10px; /* 10px between rows and columns */
+  width: 100%;
+  max-width: 500px; /* Constrain grid width */
+}
+
+/* Box styles */
+.box {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  height: 100px; /* Fixed height */
+}
+
+/* Add numbers to boxes */
+.box::after {
+  content: attr(data-title);
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* Position boxes 1, 2, 3 in last column */
+.box[data-title='1'] {
+  grid-column: 4;
+  grid-row: 1;
+}
+.box[data-title='2'] {
+  grid-column: 4;
+  grid-row: 2;
+}
+.box[data-title='3'] {
+  grid-column: 4;
+  grid-row: 3;
+}
+
+/* Template styles (hidden) */
+.template {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .box {
+    height: 80px; /* Smaller boxes on mobile */
+  }
+  .layout {
+    grid-auto-rows: 80px; /* Smaller rows on mobile */
+  }
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-auto-rows: 100px;
+  width: 1000px;
+  gap: 10px;
+}
+
+.square {
+  height: 100px;
+  border: 1px solid red;
+}
+
+.square[data-title='1'] {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.square[data-title='3'] {
+  grid-column: 4;
+  grid-row: 3;
+}
+.square[data-title='2'] {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+.square::after {
+  content: attr(data-title);
+}
