@@ -4,32 +4,37 @@ import { useRef, useState, useEffect } from 'react';
 // 1. TABS
 // ============================================================
 const Tabs = () => {
-  const [activeTab, setActiveTab] = useState('home');
-  const prevTab = useRef('home');
+  // do the current and prev using ref without rerender
 
-  const switchTab = (tab: string) => {
-    prevTab.current = activeTab;
-    setActiveTab(tab);
+  const ref = useRef('home');
+
+  const [currentTab, setCurrentTab] = useState('');
+  const tabsApi = [
+    {
+      id: 1,
+      name: 'Home',
+    },
+    {
+      id: 2,
+      name: 'Away',
+    },
+  ];
+
+  const handleSelect = (tab: string) => {
+    ref.current = currentTab;
+    setCurrentTab(tab);
   };
 
   return (
     <div>
-      <p className="text-sm text-gray-400">
-        Current: <span className="text-white">{activeTab}</span>
-      </p>
-      <p className="text-sm text-gray-400 mb-3">
-        Previous: <span className="text-yellow-400">{prevTab.current}</span>
-      </p>
-      <div className="flex gap-2">
-        {['home', 'profile', 'settings'].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => switchTab(tab)}
-            className={`px-3 py-1 rounded text-sm font-medium ${activeTab === tab ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-          >
-            {tab}
-          </button>
-        ))}
+      {tabsApi.map(({ name: tab }) => (
+        <div className="border" onClick={() => handleSelect(tab)}>
+          {tab}
+        </div>
+      ))}
+      <div className="border">
+        <p>Prev: </p>
+        {ref.current}
       </div>
     </div>
   );
