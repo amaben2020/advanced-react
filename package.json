@@ -8,6 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "ws": "node server/ws-echo-server.cjs",
+    "ws:stream": "node server/ws-server.cjs",
     "db": ""
   },
   "dependencies": {
