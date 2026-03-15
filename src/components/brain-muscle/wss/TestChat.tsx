@@ -7,6 +7,8 @@ export default function TestChat({ url }: { url?: string }) {
     [{ type: '', message: '' }],
   );
 
+  const [inputMessage, setInputMessage] = useState('');
+
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ export default function TestChat({ url }: { url?: string }) {
 
       switch (msg.type) {
         case 'history':
-          setMessages((p) => [...p, { message: event.data, type: 'history' }]);
+          setMessages((p) => [...p, { message: msg.data, type: 'history' }]);
           break;
       }
     };
@@ -47,11 +49,19 @@ export default function TestChat({ url }: { url?: string }) {
     };
   }, []);
 
+  const handleChange = (event) => {
+    setInputMessage(event.target.value);
+  };
+
   const handleSend = (event: any) => {
     event.preventDefault();
-    if (wsRef.current?.readyState === WebSocket.OPEN)
-      wsRef.current?.send('Ben the great');
-    setMessages((p) => [...p, { type: 'user', message: 'Wht i typed' }]);
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      // sent to BE to be stored in history and db
+      wsRef.current?.send(inputMessage);
+      setMessages((p) => [...p, { type: 'user', message: inputMessage }]);
+    }
+
+    setInputMessage('');
   };
 
   return (
@@ -75,14 +85,19 @@ export default function TestChat({ url }: { url?: string }) {
             {msg.type === 'history' ? (
               <div className="bg-gray-400">{msg.message} </div>
             ) : (
-              <div className="bg-gray-700">User: {msg.message} </div>
+              <div className="bg-gray-700"> {msg.message} </div>
             )}
           </>
         ))}
       </div>
 
       <form onSubmit={handleSend}>
-        <input type="text" className="border p-3 rounded-2xl " />
+        <input
+          type="text"
+          className="border p-3 rounded-2xl "
+          onChange={handleChange}
+          value={inputMessage}
+        />
         <button type="submit">Submit</button>
       </form>
     </div>

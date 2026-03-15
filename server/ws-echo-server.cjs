@@ -13,6 +13,9 @@ wss.on('connection', (ws) => {
 
     ws.send(JSON.stringify({ type: 'history', data: data?.toString() }));
 
+    ws.send(JSON.stringify({ type: 'thinking', data: 'AI IS THINKING' }));
+    ws.send(JSON.stringify({ type: 'suggestion', data: ['First', 'Second'] }));
+
     wss.clients.forEach(function each(client) {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         // client.send(data, { binary: isBinary });
