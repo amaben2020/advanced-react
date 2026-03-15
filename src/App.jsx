@@ -6,8 +6,9 @@ import {
 import BrainMuscle from './components/brain-muscle';
 import Messages from './components/brain-muscle/messages';
 import RefsApp from './components/brain-muscle/refs';
-import StreamingChat from './components/brain-muscle/wss';
+// import StreamingChat from './components/brain-muscle/wss';
 import Chat from './components/brain-muscle/wss/Chat';
+import TestChat from './components/brain-muscle/wss/TestChat';
 // import GoogleSearch from './components/google-search';
 // import SimpleButton from './components/hoc/SimpleButton';
 // import withLogging from './components/hoc/withLogging';
@@ -31,7 +32,8 @@ function App() {
       {/* <Messages /> */}
       {/* <RefsApp /> */}
       {/* <Chat /> */}
-      <StreamingChat />
+      {/* <StreamingChat /> */}
+      <TestChat />
     </>
   );
 }
