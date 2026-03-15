@@ -1,34 +1,67 @@
-// Simple echo WebSocket server
+// Simple echo WebSocket server with SQLite
 // Run: node server/ws-echo-server.cjs
-const { WebSocketServer, WebSocket } = require('ws'); // add WebSocket
+const { WebSocketServer, WebSocket } = require('ws');
+const Database = require('better-sqlite3');
+const path = require('path');
 
+// ── SQLite setup ──
+const db = new Database(path.join(__dirname, 'chat.db'));
+db.pragma('journal_mode = WAL');
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT NOT NULL,
+    message TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
+const insertMsg = db.prepare('INSERT INTO messages (type, message) VALUES (?, ?)');
+const getHistory = db.prepare('SELECT type, message FROM messages ORDER BY id ASC');
+
+// ── Mock replies ──
+const replies = [
+  'Got it, thanks!',
+  'Interesting, tell me more.',
+  'I totally agree with that.',
+  'Hmm, let me think about it...',
+  'That makes sense!',
+  'Could you elaborate on that?',
+  'Nice one!',
+  'I see what you mean.',
+  'That\'s a great point!',
+  'Let me get back to you on that.',
+];
+
+// ── WebSocket server ──
 const wss = new WebSocketServer({ port: 8081 });
 console.log('Echo server running on ws://localhost:8081');
 
 wss.on('connection', (ws) => {
   ws.on('error', console.error);
 
+  // Send full chat history on connect
+  const history = getHistory.all();
+  ws.send(JSON.stringify({ type: 'history_bulk', data: history }));
+
   ws.on('message', (data) => {
-    console.log('received from client', data?.toString());
+    const text = data?.toString();
+    console.log('received from client:', text);
 
-    ws.send(JSON.stringify({ type: 'history', data: data?.toString() }));
+    // Store user message
+    insertMsg.run('user', text);
 
-    ws.send(JSON.stringify({ type: 'thinking', data: 'AI IS THINKING' }));
-    ws.send(JSON.stringify({ type: 'suggestion', data: ['First', 'Second'] }));
+    // Pick a random reply, store it, send it back
+    const reply = replies[Math.floor(Math.random() * replies.length)];
+    insertMsg.run('history', reply);
 
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        // client.send(data, { binary: isBinary });
-        client.send('Client connected successfully');
-      }
-    });
+    ws.send(JSON.stringify({ type: 'history', data: reply }));
   });
 
   ws.on('close', () => {
     console.log('Closing....');
   });
-
-  // ws.send('Echo from server');
 });
 
 // const { WebSocketServer, WebSocket } = require('ws');
