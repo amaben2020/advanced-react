@@ -8,8 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "ws": "node server/ws-echo-server.cjs",
-    "ws:stream": "node server/ws-server.cjs",
+    "ws": "lsof -ti:8081 | xargs kill 2>/dev/null; node server/ws-echo-server.cjs",
+    "ws:stream": "lsof -ti:8080 | xargs kill 2>/dev/null; node server/ws-server.cjs",
     "db": ""
   },
   "dependencies": {

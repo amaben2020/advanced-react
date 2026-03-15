@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 // ── Component ──
 export default function TestChat({ url }: { url?: string }) {
   const [connected, setConnected] = useState(false);
+  const [messages, setMessages] = useState<{ type: string; message: string }[]>(
+    [{ type: '', message: '' }],
+  );
 
   const wsRef = useRef<WebSocket | null>(null);
 
@@ -18,6 +21,14 @@ export default function TestChat({ url }: { url?: string }) {
 
     wsRef.current.onmessage = (event: { type: string; data: string }) => {
       console.log('BE MESSAGE', event.data);
+
+      const msg = JSON.parse(event.data);
+
+      switch (msg.type) {
+        case 'history':
+          setMessages((p) => [...p, { message: event.data, type: 'history' }]);
+          break;
+      }
     };
 
     wsRef.current.onerror = (error) => {
@@ -40,6 +51,7 @@ export default function TestChat({ url }: { url?: string }) {
     event.preventDefault();
     if (wsRef.current?.readyState === WebSocket.OPEN)
       wsRef.current?.send('Ben the great');
+    setMessages((p) => [...p, { type: 'user', message: 'Wht i typed' }]);
   };
 
   return (
@@ -56,6 +68,18 @@ export default function TestChat({ url }: { url?: string }) {
           borderRadius: '999px',
         }}
       ></div>
+
+      <div>
+        {messages.map((msg) => (
+          <>
+            {msg.type === 'history' ? (
+              <div className="bg-gray-400">{msg.message} </div>
+            ) : (
+              <div className="bg-gray-700">User: {msg.message} </div>
+            )}
+          </>
+        ))}
+      </div>
 
       <form onSubmit={handleSend}>
         <input type="text" className="border p-3 rounded-2xl " />
