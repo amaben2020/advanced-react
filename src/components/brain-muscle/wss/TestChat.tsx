@@ -82,23 +82,37 @@ export default function TestChat({ url }: { url?: string }) {
         }}
       ></div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '12px 0', maxHeight: 400, overflowY: 'auto' }}>
-        {messages.filter(m => m.message).map((msg, i) => (
-          <div
-            key={i}
-            style={{
-              alignSelf: msg.type === 'user' ? 'flex-end' : 'flex-start',
-              background: msg.type === 'user' ? '#2563eb' : '#374151',
-              color: '#fff',
-              padding: '8px 14px',
-              borderRadius: msg.type === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-              maxWidth: '75%',
-              fontSize: 14,
-            }}
-          >
-            {msg.message}
-          </div>
-        ))}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+          padding: '12px 0',
+          maxHeight: 400,
+          overflowY: 'auto',
+        }}
+      >
+        {messages
+          .filter((m) => m.message)
+          .map((msg, i) => (
+            <div
+              key={i}
+              style={{
+                alignSelf: msg.type === 'user' ? 'flex-end' : 'flex-start',
+                background: msg.type === 'user' ? '#2563eb' : '#374151',
+                color: '#fff',
+                padding: '8px 14px',
+                borderRadius:
+                  msg.type === 'user'
+                    ? '16px 16px 4px 16px'
+                    : '16px 16px 16px 4px',
+                maxWidth: '75%',
+                fontSize: 14,
+              }}
+            >
+              {msg.message}
+            </div>
+          ))}
       </div>
 
       <form onSubmit={handleSend}>

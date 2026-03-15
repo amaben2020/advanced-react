@@ -17,8 +17,12 @@ db.exec(`
   )
 `);
 
-const insertMsg = db.prepare('INSERT INTO messages (type, message) VALUES (?, ?)');
-const getHistory = db.prepare('SELECT type, message FROM messages ORDER BY id ASC');
+const insertMsg = db.prepare(
+  'INSERT INTO messages (type, message) VALUES (?, ?)',
+);
+const getHistory = db.prepare(
+  'SELECT type, message FROM messages ORDER BY id ASC',
+);
 
 // ── Mock replies ──
 const replies = [
@@ -30,7 +34,7 @@ const replies = [
   'Could you elaborate on that?',
   'Nice one!',
   'I see what you mean.',
-  'That\'s a great point!',
+  "That's a great point!",
   'Let me get back to you on that.',
 ];
 
@@ -52,7 +56,7 @@ wss.on('connection', (ws) => {
     // Store user message
     insertMsg.run('user', text);
 
-    // Pick a random reply, store it, send it back
+    // Pick a random reply, store it, send it back, could be ai and you must store the processed info into db before sending to client
     const reply = replies[Math.floor(Math.random() * replies.length)];
     insertMsg.run('history', reply);
 
@@ -68,13 +72,13 @@ wss.on('connection', (ws) => {
 // const wss = new WebSocketServer({ port: 8081 });
 
 // ── helpers ──────────────────────────────────────────────
-const send = (ws, type, data = null) => ws.send(JSON.stringify({ type, data }));
+// const send = (ws, type, data = null) => ws.send(JSON.stringify({ type, data }));
 
-const broadcast = (excludeWs, type, data = null) =>
-  wss.clients.forEach((c) => {
-    if (c !== excludeWs && c.readyState === WebSocket.OPEN)
-      c.send(JSON.stringify({ type, data }));
-  });
+// const broadcast = (excludeWs, type, data = null) =>
+//   wss.clients.forEach((c) => {
+//     if (c !== excludeWs && c.readyState === WebSocket.OPEN)
+//       c.send(JSON.stringify({ type, data }));
+//   });
 
 // ── ping/pong — keepalive ─────────────────────────────────
 // Without this, idle connections silently die (load balancers,
