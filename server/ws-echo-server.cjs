@@ -47,20 +47,23 @@ wss.on('connection', (ws) => {
 
   // Send full chat history on connect
   const history = getHistory.all();
+  // ws.send triggers ws.message on another side
   ws.send(JSON.stringify({ type: 'history_bulk', data: history }));
 
   // ws.send triggers ws.message on another side
   ws.on('message', (data) => {
+    // user text when they type in input
     const text = data?.toString();
-    console.log('received from client:', text);
 
-    // Store user message
+    // Store user message to db
     insertMsg.run('user', text);
 
     // Pick a random reply, store it, send it back, could be ai and you must store the processed info into db before sending to client
     const reply = replies[Math.floor(Math.random() * replies.length)];
+    //store the assistant message in db
     insertMsg.run('history', reply);
 
+    // send to client
     ws.send(JSON.stringify({ type: 'history', data: reply }));
   });
 

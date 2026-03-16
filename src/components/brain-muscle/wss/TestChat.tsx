@@ -11,6 +11,8 @@ export default function TestChat({ url }: { url?: string }) {
 
   const wsRef = useRef<WebSocket | null>(null);
 
+  const scrollDownRef = useRef(null);
+
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:8081');
 
@@ -66,6 +68,8 @@ export default function TestChat({ url }: { url?: string }) {
 
     setInputMessage('');
   };
+
+  console.log('messages ===>', messages);
 
   return (
     <div
