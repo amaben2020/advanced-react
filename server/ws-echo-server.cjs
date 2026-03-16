@@ -49,6 +49,7 @@ wss.on('connection', (ws) => {
   const history = getHistory.all();
   ws.send(JSON.stringify({ type: 'history_bulk', data: history }));
 
+  // ws.send triggers ws.message on another side
   ws.on('message', (data) => {
     const text = data?.toString();
     console.log('received from client:', text);
