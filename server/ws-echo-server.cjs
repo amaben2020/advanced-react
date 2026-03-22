@@ -4,6 +4,16 @@ const { WebSocketServer, WebSocket } = require('ws');
 const Database = require('better-sqlite3');
 const path = require('path');
 
+// Heartbeat interval in milliseconds
+const HEARTBEAT_INTERVAL = 30000; // 30 seconds
+const CLIENT_TIMEOUT = 35000; // 35 seconds (slightly more than interval)
+
+// https://oneuptime.com/blog/post/2026-01-24-websocket-heartbeat-ping-pong/view
+function heartBeat() {
+  // Mark connection as alive when pong received
+  this.isAlive = true;
+}
+
 // ── SQLite setup ──
 const db = new Database(path.join(__dirname, 'chat.db'));
 db.pragma('journal_mode = WAL');
@@ -42,7 +52,29 @@ const replies = [
 const wss = new WebSocketServer({ port: 8081 });
 console.log('Echo server running on ws://localhost:8081');
 
+// Heartbeat interval - ping all connections
+const heartbeatInterval = setInterval(function () {
+  wss.clients.forEach(function (ws) {
+    if (ws.isAlive === false) {
+      // Connection did not respond to last ping
+      console.log('Terminating dead connection');
+      return ws.terminate();
+    }
+
+    // Mark as potentially dead until pong received
+    ws.isAlive = false;
+
+    // Send ping frame
+    ws.ping();
+  });
+}, HEARTBEAT_INTERVAL);
+
 wss.on('connection', (ws) => {
+  ws.isAlive = true;
+
+  // listen for pong responses
+  ws.on('pong', heartBeat);
+
   ws.on('error', console.error);
 
   // Send full chat history on connect
@@ -50,11 +82,30 @@ wss.on('connection', (ws) => {
   // ws.send triggers ws.message on another side
   ws.send(JSON.stringify({ type: 'history_bulk', data: history }));
 
-  // ws.send triggers ws.message on another side
+  // ws.send triggers ws.message on another side, when client sends message
   ws.on('message', (data) => {
-    // user text when they type in input
+    // user text when they type in input from client
     const text = data?.toString();
 
+    // ── App-level ping/pong ──
+    // Client sends a JSON { type: "ping" } and we reply with { type: "pong" }
+    try {
+      const parsed = JSON.parse(text);
+      if (parsed.type === 'ping') {
+        ws.send(JSON.stringify({ type: 'pong', data: Date.now() }));
+        return; // don't process as a chat message
+      }
+    } catch {
+      // not JSON — treat as plain chat text (existing behavior)
+    }
+
+    ws.send(
+      JSON.stringify({
+        type: 'thinking',
+        // here we can also add an api call
+        data: 'The user was thinking about ...',
+      }),
+    );
     // Store user message to db
     insertMsg.run('user', text);
 
@@ -63,11 +114,12 @@ wss.on('connection', (ws) => {
     //store the assistant message in db
     insertMsg.run('history', reply);
 
-    // send to client
+    // send to client; history is the assistant response
     ws.send(JSON.stringify({ type: 'history', data: reply }));
   });
 
   ws.on('close', () => {
+    clearInterval(heartbeatInterval);
     console.log('Closing....');
   });
 });

@@ -6,9 +6,11 @@ import {
 import BrainMuscle from './components/brain-muscle';
 import Messages from './components/brain-muscle/messages';
 import RefsApp from './components/brain-muscle/refs';
-// import StreamingChat from './components/brain-muscle/wss';
+import StreamingChat from './components/brain-muscle/wss';
 import Chat from './components/brain-muscle/wss/Chat';
 import TestChat from './components/brain-muscle/wss/TestChat';
+import Zustander from './zustand';
+import useCounter from './zustand/store';
 // import GoogleSearch from './components/google-search';
 // import SimpleButton from './components/hoc/SimpleButton';
 // import withLogging from './components/hoc/withLogging';
@@ -19,6 +21,7 @@ import TestChat from './components/brain-muscle/wss/TestChat';
 function App() {
   // const ButtonLogger = withLogging(SimpleButton, { title: 'Logger Button' });
   const queryClient = new QueryClient();
+  const { count } = useCounter();
   return (
     <>
       {/* <ButtonLogger name="Ben" onClick={() => console.log('clicked')} /> */}
@@ -34,6 +37,8 @@ function App() {
       {/* <Chat /> */}
       {/* <StreamingChat /> */}
       <TestChat />
+      {/* <>{count}</>
+      <Zustander /> */}
     </>
   );
 }

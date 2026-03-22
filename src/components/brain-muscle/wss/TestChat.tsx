@@ -6,12 +6,13 @@ export default function TestChat({ url }: { url?: string }) {
   const [messages, setMessages] = useState<{ type: string; message: string }[]>(
     [{ type: '', message: '' }],
   );
-
   const [inputMessage, setInputMessage] = useState('');
+  const [latency, setLatency] = useState<number | null>(null);
+  const pingTimestampRef = useRef<number>(0);
 
   const wsRef = useRef<WebSocket | null>(null);
 
-  const scrollDownRef = useRef(null);
+  const scrollDownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:8081');
@@ -32,8 +33,15 @@ export default function TestChat({ url }: { url?: string }) {
         case 'history_bulk':
           setMessages(msg.data);
           break;
+        case 'thinking':
+          setMessages((p) => [...p, { message: msg.data, type: 'thinking' }]);
+          break;
         case 'history':
           setMessages((p) => [...p, { message: msg.data, type: 'history' }]);
+          break;
+        case 'pong':
+          // App-level pong: measure round-trip latency
+          setLatency(Date.now() - pingTimestampRef.current);
           break;
       }
     };
@@ -47,8 +55,17 @@ export default function TestChat({ url }: { url?: string }) {
       console.log('Connection closed');
     };
 
+    // App-level ping: send every 10s to measure latency
+    const pingInterval = setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        pingTimestampRef.current = Date.now();
+        ws.send(JSON.stringify({ type: 'ping' }));
+      }
+    }, 10000);
+
     return () => {
       console.log('unmounted');
+      clearInterval(pingInterval);
       wsRef.current?.close();
       setConnected(false);
     };
@@ -69,6 +86,10 @@ export default function TestChat({ url }: { url?: string }) {
     setInputMessage('');
   };
 
+  useEffect(() => {
+    scrollDownRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   console.log('messages ===>', messages);
 
   return (
@@ -77,14 +98,21 @@ export default function TestChat({ url }: { url?: string }) {
     >
       <h2>WSS Test Chat</h2>
 
-      <div
-        style={{
-          background: connected ? 'green' : 'red',
-          width: 8,
-          height: 8,
-          borderRadius: '999px',
-        }}
-      ></div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div
+          style={{
+            background: connected ? 'green' : 'red',
+            width: 8,
+            height: 8,
+            borderRadius: '999px',
+          }}
+        />
+        {latency !== null && (
+          <span style={{ fontSize: 12, color: '#888' }}>
+            {latency}ms
+          </span>
+        )}
+      </div>
 
       <div
         style={{
@@ -103,7 +131,12 @@ export default function TestChat({ url }: { url?: string }) {
               key={i}
               style={{
                 alignSelf: msg.type === 'user' ? 'flex-end' : 'flex-start',
-                background: msg.type === 'user' ? '#2563eb' : '#374151',
+                background:
+                  msg.type === 'user'
+                    ? '#2563eb'
+                    : msg.type === 'thinking'
+                      ? '#d4d4d4'
+                      : '#374151',
                 color: '#fff',
                 padding: '8px 14px',
                 borderRadius:
@@ -117,6 +150,7 @@ export default function TestChat({ url }: { url?: string }) {
               {msg.message}
             </div>
           ))}
+        <div ref={scrollDownRef} />
       </div>
 
       <form onSubmit={handleSend}>
